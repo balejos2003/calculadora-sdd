@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <main class="calculator">
+
+    <!-- Visor: mostra o valor conforme os números são digitados (RF03) -->
+    <div class="display" aria-live="polite">0</div>
+
+    <!-- Teclado da calculadora -->
+    <div class="keypad">
+
+      <!-- Botões de limpar (RF02). Lógica ainda não implementada (tarefa 5). -->
+      <button type="button" class="btn btn-clear" data-action="clear">C</button>
+      <button type="button" class="btn btn-clear" data-action="all-clear">AC</button>
+      <button type="button" class="btn btn-operator" data-operator="/">÷</button>
+
+      <button type="button" class="btn btn-digit" data-digit="7">7</button>
+      <button type="button" class="btn btn-digit" data-digit="8">8</button>
+      <button type="button" class="btn btn-digit" data-digit="9">9</button>
+      <button type="button" class="btn btn-operator" data-operator="*">×</button>
+
+      <button type="button" class="btn btn-digit" data-digit="4">4</button>
+      <button type="button" class="btn btn-digit" data-digit="5">5</button>
+      <button type="button" class="btn btn-digit" data-digit="6">6</button>
+      <button type="button" class="btn btn-operator" data-operator="-">−</button>
+
+      <button type="button" class="btn btn-digit" data-digit="1">1</button>
+      <button type="button" class="btn btn-digit" data-digit="2">2</button>
+      <button type="button" class="btn btn-digit" data-digit="3">3</button>
+      <button type="button" class="btn btn-operator" data-operator="+">+</button>
+
+      <button type="button" class="btn btn-digit btn-zero" data-digit="0">0</button>
+      <button type="button" class="btn btn-digit" data-decimal>.</button>
+      <button type="button" class="btn btn-equals" data-equals>=</button>
+
+    </div>
+
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
