@@ -101,6 +101,15 @@ body {
   grid-column: span 2;
 }
 
+/* Botões que ocupam 2 colunas não devem manter aspect-ratio 1:1 — senão a
+   largura dobrada infla a altura, distorcendo a linha inteira do grid.
+   Aqui a altura fica "auto" e é esticada pelo align-items: stretch padrão
+   do grid, igualando à altura dos botões quadrados vizinhos na mesma linha. */
+.keypad [data-action="all-clear"],
+.btn-zero {
+  aspect-ratio: auto;
+}
+
 /* ---------------------------------------------------------------------
    Botões
    --------------------------------------------------------------------- */
@@ -122,10 +131,6 @@ body {
 
   cursor: pointer;
   transition: background-color 0.15s ease, transform 0.05s ease;
-}
-
-.btn-zero {
-  aspect-ratio: auto;
 }
 
 .btn:hover {
