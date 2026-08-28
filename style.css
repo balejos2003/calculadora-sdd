@@ -1,10 +1,19 @@
 /* style.css
    Tarefa implementada: "Estilizar com CSS (layout em grid, responsivo)"
    Segue plan.md, seção 3.4: teclado em CSS Grid + media queries para
-   responsividade (RNF01 / CA10 do spec.md). */
+   responsividade (RNF01 / CA10 do spec.md).
+
+   NOTA TÉCNICA: a primeira versão deste arquivo usava `aspect-ratio: 1/1`
+   nos botões para deixá-los quadrados. Isso quebrou visualmente quando
+   combinado com botões que ocupam 2 colunas (AC e "0"), porque a largura
+   dobrada inflava a altura calculada pelo aspect-ratio, distorcendo a
+   linha inteira do grid — um comportamento conhecido por ser instável
+   entre navegadores. A versão atual usa altura de linha fixa e responsiva
+   via `grid-auto-rows` + `clamp()`, que é previsível independentemente de
+   quantas colunas um botão ocupa. */
 
 /* ---------------------------------------------------------------------
-   Tokens (cores, tipografia)
+   Tokens (cores, tipografia, tamanhos)
    --------------------------------------------------------------------- */
 :root {
   --color-bg: #14171c;
@@ -24,6 +33,11 @@
   --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   --radius: 12px;
+  --gap: 10px;
+
+  /* Altura de cada linha do teclado — fluida entre um mínimo e um máximo,
+     em vez de depender de aspect-ratio. */
+  --button-size: clamp(52px, 16vw, 76px);
 }
 
 /* ---------------------------------------------------------------------
@@ -84,14 +98,17 @@ body {
 
 /* ---------------------------------------------------------------------
    Teclado — CSS Grid (plan.md, seção 3.4)
+   4 colunas de largura igual; a altura de cada linha vem de
+   --button-size, aplicada via grid-auto-rows (não via aspect-ratio).
    --------------------------------------------------------------------- */
 .keypad {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  grid-auto-rows: var(--button-size);
+  gap: var(--gap);
 }
 
-/* AC ocupa 2 colunas para preencher a primeira linha (que tem só 3 botões) */
+/* AC ocupa 2 colunas (preenche a primeira linha, que tem só 3 botões) */
 .keypad [data-action="all-clear"] {
   grid-column: span 2;
 }
@@ -99,15 +116,6 @@ body {
 /* "0" ocupa 2 colunas na última linha */
 .btn-zero {
   grid-column: span 2;
-}
-
-/* Botões que ocupam 2 colunas não devem manter aspect-ratio 1:1 — senão a
-   largura dobrada infla a altura, distorcendo a linha inteira do grid.
-   Aqui a altura fica "auto" e é esticada pelo align-items: stretch padrão
-   do grid, igualando à altura dos botões quadrados vizinhos na mesma linha. */
-.keypad [data-action="all-clear"],
-.btn-zero {
-  aspect-ratio: auto;
 }
 
 /* ---------------------------------------------------------------------
@@ -122,8 +130,10 @@ body {
   border: none;
   border-radius: var(--radius);
 
-  aspect-ratio: 1 / 1;
+  /* A altura vem do grid-auto-rows do .keypad; aqui só garantimos que o
+     botão preencha 100% da célula que o grid já reservou para ele. */
   width: 100%;
+  height: 100%;
 
   display: flex;
   align-items: center;
@@ -176,16 +186,14 @@ body {
    Responsividade (RNF01 / CA10)
    --------------------------------------------------------------------- */
 
-/* Telas pequenas (celular): reduz espaçamentos e ocupa mais a largura */
+/* Telas pequenas (celular): reduz espaçamentos e ocupa mais a largura.
+   --button-size já se ajusta sozinho via clamp()/vw, então aqui só
+   ajustamos espaçamentos que não dependem da largura da viewport. */
 @media (max-width: 480px) {
   .calculator {
     max-width: 100%;
     padding: 16px;
     border-radius: 16px;
-  }
-
-  .keypad {
-    gap: 8px;
   }
 
   .display {
